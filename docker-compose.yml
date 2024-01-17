@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  mi-speedtest:
+    build: .
+    image: mi-speedtest
+    environment:
+      - TINYBIRD_TOKEN=${TINYBIRD_TOKEN}
+      - TINYBIRD_BASE_URL=${TINYBIRD_BASE_URL:-https://api.us-east.aws.tinybird.co}
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+      - ERROR_REPORTING=${ERROR_REPORTING:-FALSE}
+    restart: unless-stopped
