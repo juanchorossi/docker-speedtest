@@ -1,0 +1,90 @@
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T16:59:17Z","ping":{"jitter":0.380,"latency":4.446,"low":4.122,"high":4.900},"download":{"bandwidth":37151674,"bytes":361942000,"elapsed":9610,"latency":{"iqm":4.290,"low":3.224,"high":219.400,"jitter":3.480}},"upload":{"bandwidth":1918835,"bytes":26969600,"elapsed":12609,"latency":{"iqm":21.843,"low":3.262,"high":434.762,"jitter":37.334}},"packetLoss":0,"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":60508,"host":"speedofi.wiredcom.com.ar","port":8080,"name":"WiredCom","location":"San Fernando","country":"Argentina","ip":"168.196.140.64"},"result":{"id":"e857373f-dcf8-43c9-8d7c-b72689b66db1","url":"https://www.speedtest.net/result/c/e857373f-dcf8-43c9-8d7c-b72689b66db1","persisted":true}}
+
+Download: 297.21 Mbps
+Upload: 15.35 Mbps
+Ping: 4.45 ms
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T17:03:42Z","ping":{"jitter":8.469,"latency":3.750,"low":3.559,"high":20.594},"download":{"bandwidth":36575523,"bytes":360460000,"elapsed":9510,"latency":{"iqm":4.085,"low":2.974,"high":210.154,"jitter":7.471}},"upload":{"bandwidth":1904524,"bytes":26976600,"elapsed":12714,"latency":{"iqm":27.769,"low":2.547,"high":831.540,"jitter":40.154}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"511db9cf-0d1f-4311-b950-9e7c85c2f20e","url":"https://www.speedtest.net/result/c/511db9cf-0d1f-4311-b950-9e7c85c2f20e","persisted":true}}
+
+Download: 292.60 Mbps
+Upload: 15.24 Mbps
+Ping: 3.75 ms
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T17:14:18Z","ping":{"jitter":3.047,"latency":3.497,"low":3.371,"high":9.515},"download":{"bandwidth":36579409,"bytes":380414772,"elapsed":10108,"latency":{"iqm":3.999,"low":3.042,"high":22.829,"jitter":1.618}},"upload":{"bandwidth":1909136,"bytes":27379216,"elapsed":13113,"latency":{"iqm":42.141,"low":2.487,"high":423.868,"jitter":44.682}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13442,"host":"st-banorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"San Isidro","country":"Argentina","ip":"181.12.140.20"},"result":{"id":"e2417e63-f3a0-48fa-b3df-d3912dd3762a","url":"https://www.speedtest.net/result/c/e2417e63-f3a0-48fa-b3df-d3912dd3762a","persisted":true}}
+
+Download: 292.64 Mbps
+Upload: 15.27 Mbps
+Ping: 3.50 ms
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.

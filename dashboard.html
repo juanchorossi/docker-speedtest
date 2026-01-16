@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speedtest Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #334155;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        header h1 { font-size: 1.8rem; font-weight: 600; }
+        .time-filter { display: flex; gap: 8px; }
+        .btn {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        .btn:hover { background: var(--border); }
+        .btn.active { background: var(--primary); border-color: var(--primary); }
+
+        /* Metric Cards Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        /* Unified Metric Card Structure */
+        .metric-card {
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Card Header: Icon + Title + Badge */
+        .metric-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            min-height: 28px;
+        }
+        .metric-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .metric-icon.download { background: rgba(59, 130, 246, 0.15); color: var(--primary); }
+        .metric-icon.upload { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .metric-icon.ping { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+
+        .metric-title {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-grow: 1;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
+        }
+        .status-badge.excellent { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .status-badge.good { background: rgba(59, 130, 246, 0.15); color: var(--primary); }
+        .status-badge.fair { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .status-badge.poor { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+
+        /* Main Value Block */
+        .metric-value-block {
+            margin-bottom: 8px;
+            min-height: 44px;
+            display: flex;
+            align-items: baseline;
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .metric-value.download { color: var(--primary); }
+        .metric-value.upload { color: var(--success); }
+        .metric-value.ping { color: var(--warning); }
+        .metric-unit {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-left: 4px;
+        }
+
+        /* Benchmark Reference */
+        .metric-benchmark {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            min-height: 18px;
+        }
+        .metric-benchmark .percent {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Timestamp */
+        .metric-timestamp {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            min-height: 18px;
+        }
+
+        /* Separator */
+        .metric-separator {
+            height: 1px;
+            background: var(--border);
+            margin-bottom: 16px;
+        }
+
+        /* Secondary Metrics */
+        .metric-secondary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .secondary-item {
+            text-align: center;
+        }
+        .secondary-label {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+        .secondary-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Jitter subordinate styling */
+        .jitter-value {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .chart-section {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+        .chart-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .chart-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+        }
+        .chart-container {
+            position: relative;
+            height: 240px;
+        }
+
+        /* Summary Stats */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .summary-card {
+            background: var(--card);
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .summary-label {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+        }
+        .summary-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Alert */
+        .alert {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .alert-icon {
+            background: var(--danger);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+        .alert-text { color: var(--danger); font-weight: 500; }
+        .hidden { display: none !important; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            padding: 20px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Refresh Indicator */
+        .refresh-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--success), var(--primary));
+            background-size: 200% 100%;
+            animation: loading 1s ease-in-out infinite;
+            z-index: 1000;
+            display: none;
+        }
+        .refresh-indicator.active { display: block; }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .refresh-btn {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin: 0 auto 12px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .refresh-btn:active { background: var(--border); }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .metrics-grid { grid-template-columns: repeat(3, 1fr); }
+            .charts-grid { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; padding-top: env(safe-area-inset-top, 15px); }
+
+            header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                position: sticky;
+                top: 0;
+                background: var(--bg);
+                margin: -15px -15px 20px -15px;
+                padding: 15px;
+                z-index: 100;
+                border-bottom: 1px solid var(--border);
+            }
+            header h1 { font-size: 1.4rem; text-align: center; }
+
+            .time-filter {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+                width: 100%;
+            }
+            .btn {
+                padding: 12px 8px;
+                font-size: 0.8125rem;
+                font-weight: 600;
+                text-align: center;
+                border-radius: 8px;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+                transition: transform 0.1s, background 0.2s;
+            }
+            .btn:active { transform: scale(0.95); }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .metric-card { padding: 16px; }
+            .metric-header { margin-bottom: 12px; }
+            .metric-value { font-size: 1.75rem; }
+            .metric-secondary { gap: 8px; }
+
+            .charts-grid { gap: 12px; }
+            .chart-section { padding: 16px; }
+            .chart-container { height: 200px; }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            .summary-card { padding: 12px; }
+            .summary-value { font-size: 1rem; }
+
+            .refresh-btn { display: block; }
+
+            footer {
+                padding: 15px 0;
+                padding-bottom: env(safe-area-inset-bottom, 15px);
+            }
+        }
+
+        @media (max-width: 380px) {
+            .container { padding: 10px; }
+            header h1 { font-size: 1.2rem; }
+            .btn { padding: 10px 6px; font-size: 0.75rem; }
+            .metric-value { font-size: 1.5rem; }
+            .chart-container { height: 180px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="refresh-indicator" id="refresh-indicator"></div>
+    <div class="container">
+        <header>
+            <h1>Speedtest Dashboard</h1>
+            <div class="time-filter">
+                <button class="btn active" data-hours="24">24h</button>
+                <button class="btn" data-hours="48">48h</button>
+                <button class="btn" data-hours="168">7d</button>
+                <button class="btn" data-hours="720">30d</button>
+            </div>
+        </header>
+
+        <div id="alert" class="alert hidden">
+            <span class="alert-icon">!</span>
+            <span class="alert-text" id="alert-text"></span>
+        </div>
+
+        <!-- Main Metrics Cards -->
+        <section class="metrics-grid">
+            <!-- Download Card -->
+            <div class="metric-card" id="card-download">
+                <div class="metric-header">
+                    <div class="metric-icon download">&#8595;</div>
+                    <span class="metric-title">Download</span>
+                    <span class="status-badge" id="status-download">--</span>
+                </div>
+                <div class="metric-value-block">
+                    <span class="metric-value download" id="value-download">--</span>
+                    <span class="metric-unit">Mbps</span>
+                </div>
+                <div class="metric-benchmark" id="benchmark-download">--</div>
+                <div class="metric-timestamp" id="timestamp-download">--</div>
+                <div class="metric-separator"></div>
+                <div class="metric-secondary">
+                    <div class="secondary-item">
+                        <div class="secondary-label">Min</div>
+                        <div class="secondary-value" id="min-download">--</div>
+                    </div>
+                    <div class="secondary-item">
+                        <div class="secondary-label">Max</div>
+                        <div class="secondary-value" id="max-download">--</div>
+                    </div>
+                    <div class="secondary-item">
+                        <div class="secondary-label">Prom</div>
+                        <div class="secondary-value" id="avg-download">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Card -->
+            <div class="metric-card" id="card-upload">
+                <div class="metric-header">
+                    <div class="metric-icon upload">&#8593;</div>
+                    <span class="metric-title">Upload</span>
+                    <span class="status-badge" id="status-upload">--</span>
+                </div>
+                <div class="metric-value-block">
+                    <span class="metric-value upload" id="value-upload">--</span>
+                    <span class="metric-unit">Mbps</span>
+                </div>
+                <div class="metric-benchmark" id="benchmark-upload">--</div>
+                <div class="metric-timestamp" id="timestamp-upload">--</div>
+                <div class="metric-separator"></div>
+                <div class="metric-secondary">
+                    <div class="secondary-item">
+                        <div class="secondary-label">Min</div>
+                        <div class="secondary-value" id="min-upload">--</div>
+                    </div>
+                    <div class="secondary-item">
+                        <div class="secondary-label">Max</div>
+                        <div class="secondary-value" id="max-upload">--</div>
+                    </div>
+                    <div class="secondary-item">
+                        <div class="secondary-label">Prom</div>
+                        <div class="secondary-value" id="avg-upload">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ping Card -->
+            <div class="metric-card" id="card-ping">
+                <div class="metric-header">
+                    <div class="metric-icon ping">&#9679;</div>
+                    <span class="metric-title">Latencia</span>
+                    <span class="status-badge" id="status-ping">--</span>
+                </div>
+                <div class="metric-value-block">
+                    <span class="metric-value ping" id="value-ping">--</span>
+                    <span class="metric-unit">ms</span>
+                </div>
+                <div class="metric-benchmark" id="benchmark-ping">--</div>
+                <div class="metric-timestamp" id="timestamp-ping">--</div>
+                <div class="metric-separator"></div>
+                <div class="metric-secondary">
+                    <div class="secondary-item">
+                        <div class="secondary-label">Min</div>
+                        <div class="secondary-value" id="min-ping">--</div>
+                    </div>
+                    <div class="secondary-item">
+                        <div class="secondary-label">Max</div>
+                        <div class="secondary-value" id="max-ping">--</div>
+                    </div>
+                    <div class="secondary-item">
+                        <div class="secondary-label">Prom</div>
+                        <div class="secondary-value" id="avg-ping">--</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts -->
+        <section class="charts-grid">
+            <div class="chart-section">
+                <div class="chart-header">
+                    <span class="chart-title">Velocidad en el tiempo</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="speedChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-section">
+                <div class="chart-header">
+                    <span class="chart-title">Latencia en el tiempo</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="pingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary Stats -->
+        <section class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-label">Tests realizados</div>
+                <div class="summary-value" id="tests-count">--</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Prom. Download</div>
+                <div class="summary-value" id="summary-avg-download">--</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Prom. Upload</div>
+                <div class="summary-value" id="summary-avg-upload">--</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">Prom. Latencia</div>
+                <div class="summary-value" id="summary-avg-ping">--</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">% Plan Download</div>
+                <div class="summary-value" id="summary-percent-download">--</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-label">% Plan Upload</div>
+                <div class="summary-value" id="summary-percent-upload">--</div>
+            </div>
+        </section>
+
+        <footer>
+            <button class="refresh-btn" id="refresh-btn">Actualizar datos</button>
+            <p>Actualizado: <span id="last-updated">--</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURACION - Editar estos valores
+        // ============================================
+        const SUPABASE_URL = 'https://xnudnksblfarvomdlexl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhudWRua3NibGZhcnZvbWRsZXhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg1NzEyNDcsImV4cCI6MjA4NDE0NzI0N30.JdCnZs80DD4_ImqkTgLDIvGW246gt_f0ZMaFBDvYunk';
+
+        // Plan contratado (benchmark)
+        const PLAN_DOWNLOAD_MBPS = 300;
+        const PLAN_UPLOAD_MBPS = 16;
+
+        // Umbrales para estados (% del plan)
+        const THRESHOLD_EXCELLENT = 90;  // >= 90% = Excelente
+        const THRESHOLD_GOOD = 70;       // >= 70% = Bueno
+        const THRESHOLD_FAIR = 50;       // >= 50% = Regular
+        // < 50% = Deficiente
+
+        // Umbrales para ping (en ms)
+        const PING_EXCELLENT = 20;
+        const PING_GOOD = 50;
+        const PING_FAIR = 100;
+        // ============================================
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let speedChart, pingChart;
+        let currentHours = 24;
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const refreshIndicator = document.getElementById('refresh-indicator');
+        const refreshBtn = document.getElementById('refresh-btn');
+
+        // Chart.js config
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = '#334155';
+
+        function showLoading() {
+            refreshIndicator.classList.add('active');
+            if (refreshBtn) refreshBtn.disabled = true;
+        }
+
+        function hideLoading() {
+            refreshIndicator.classList.remove('active');
+            if (refreshBtn) refreshBtn.disabled = false;
+        }
+
+        // Calculate semantic status based on percentage
+        function getStatus(percent) {
+            if (percent >= THRESHOLD_EXCELLENT) return { label: 'Excelente', class: 'excellent' };
+            if (percent >= THRESHOLD_GOOD) return { label: 'Bueno', class: 'good' };
+            if (percent >= THRESHOLD_FAIR) return { label: 'Regular', class: 'fair' };
+            return { label: 'Deficiente', class: 'poor' };
+        }
+
+        // Calculate ping status (lower is better)
+        function getPingStatus(ping) {
+            if (ping <= PING_EXCELLENT) return { label: 'Excelente', class: 'excellent' };
+            if (ping <= PING_GOOD) return { label: 'Bueno', class: 'good' };
+            if (ping <= PING_FAIR) return { label: 'Regular', class: 'fair' };
+            return { label: 'Deficiente', class: 'poor' };
+        }
+
+        // Format time ago
+        function timeAgo(date) {
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000 / 60);
+            if (diff < 1) return 'Hace un momento';
+            if (diff < 60) return `Hace ${diff} min`;
+            const hours = Math.floor(diff / 60);
+            if (hours < 24) return `Hace ${hours}h`;
+            const days = Math.floor(hours / 24);
+            return `Hace ${days}d`;
+        }
+
+        // Format value with proper precision
+        function formatValue(value, decimals = 1) {
+            if (value < 1 && value > 0) return '<1';
+            return Number(value).toFixed(decimals);
+        }
+
+        async function fetchData(hours) {
+            const since = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
+
+            try {
+                const { data, error } = await supabase
+                    .from('speedtest_public')
+                    .select('id,created_at,download_mbps,upload_mbps,ping_ms')
+                    .gte('created_at', since)
+                    .order('created_at', { ascending: true });
+
+                if (error) {
+                    console.error('Error fetching data:', error);
+                    return [];
+                }
+                return data || [];
+            } catch (e) {
+                console.error('Exception:', e);
+                return [];
+            }
+        }
+
+        function updateMetricCards(data) {
+            if (data.length === 0) return;
+
+            const latest = data[data.length - 1];
+            const latestDate = new Date(latest.created_at);
+            const timeAgoStr = timeAgo(latestDate);
+
+            // Calculate statistics
+            const downloads = data.map(d => Number(d.download_mbps));
+            const uploads = data.map(d => Number(d.upload_mbps));
+            const pings = data.map(d => Number(d.ping_ms));
+
+            const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+
+            const downloadValue = Number(latest.download_mbps);
+            const uploadValue = Number(latest.upload_mbps);
+            const pingValue = Number(latest.ping_ms);
+
+            const downloadPercent = (downloadValue / PLAN_DOWNLOAD_MBPS) * 100;
+            const uploadPercent = (uploadValue / PLAN_UPLOAD_MBPS) * 100;
+
+            const downloadStatus = getStatus(downloadPercent);
+            const uploadStatus = getStatus(uploadPercent);
+            const pingStatus = getPingStatus(pingValue);
+
+            // Update Download Card
+            document.getElementById('value-download').textContent = formatValue(downloadValue);
+            document.getElementById('status-download').textContent = downloadStatus.label;
+            document.getElementById('status-download').className = `status-badge ${downloadStatus.class}`;
+            document.getElementById('benchmark-download').innerHTML =
+                `<span class="percent">${Math.round(downloadPercent)}%</span> del plan (${PLAN_DOWNLOAD_MBPS} Mbps)`;
+            document.getElementById('timestamp-download').textContent = timeAgoStr;
+            document.getElementById('min-download').textContent = formatValue(Math.min(...downloads));
+            document.getElementById('max-download').textContent = formatValue(Math.max(...downloads));
+            document.getElementById('avg-download').textContent = formatValue(avg(downloads));
+
+            // Update Upload Card
+            document.getElementById('value-upload').textContent = formatValue(uploadValue);
+            document.getElementById('status-upload').textContent = uploadStatus.label;
+            document.getElementById('status-upload').className = `status-badge ${uploadStatus.class}`;
+            document.getElementById('benchmark-upload').innerHTML =
+                `<span class="percent">${Math.round(uploadPercent)}%</span> del plan (${PLAN_UPLOAD_MBPS} Mbps)`;
+            document.getElementById('timestamp-upload').textContent = timeAgoStr;
+            document.getElementById('min-upload').textContent = formatValue(Math.min(...uploads));
+            document.getElementById('max-upload').textContent = formatValue(Math.max(...uploads));
+            document.getElementById('avg-upload').textContent = formatValue(avg(uploads));
+
+            // Update Ping Card
+            document.getElementById('value-ping').textContent = formatValue(pingValue);
+            document.getElementById('status-ping').textContent = pingStatus.label;
+            document.getElementById('status-ping').className = `status-badge ${pingStatus.class}`;
+
+            // Jitter calculation (standard deviation as proxy)
+            const pingAvg = avg(pings);
+            const jitter = Math.sqrt(pings.reduce((sum, p) => sum + Math.pow(p - pingAvg, 2), 0) / pings.length);
+            const jitterDisplay = jitter < 1 ? '<1' : formatValue(jitter);
+            document.getElementById('benchmark-ping').innerHTML =
+                `Jitter: <span class="percent">${jitterDisplay} ms</span>`;
+            document.getElementById('timestamp-ping').textContent = timeAgoStr;
+            document.getElementById('min-ping').textContent = formatValue(Math.min(...pings));
+            document.getElementById('max-ping').textContent = formatValue(Math.max(...pings));
+            document.getElementById('avg-ping').textContent = formatValue(pingAvg);
+
+            // Update Summary Stats
+            document.getElementById('tests-count').textContent = data.length;
+            document.getElementById('summary-avg-download').textContent = `${formatValue(avg(downloads))} Mbps`;
+            document.getElementById('summary-avg-upload').textContent = `${formatValue(avg(uploads))} Mbps`;
+            document.getElementById('summary-avg-ping').textContent = `${formatValue(pingAvg)} ms`;
+            document.getElementById('summary-percent-download').textContent = `${Math.round((avg(downloads) / PLAN_DOWNLOAD_MBPS) * 100)}%`;
+            document.getElementById('summary-percent-upload').textContent = `${Math.round((avg(uploads) / PLAN_UPLOAD_MBPS) * 100)}%`;
+
+            // Alert check
+            const alertEl = document.getElementById('alert');
+            const alertText = document.getElementById('alert-text');
+            if (downloadPercent < THRESHOLD_FAIR) {
+                alertText.textContent = `Velocidad por debajo del 50% del plan: ${formatValue(downloadValue)} Mbps (plan: ${PLAN_DOWNLOAD_MBPS} Mbps)`;
+                alertEl.classList.remove('hidden');
+            } else {
+                alertEl.classList.add('hidden');
+            }
+        }
+
+        function createSpeedChart(data) {
+            const ctx = document.getElementById('speedChart').getContext('2d');
+
+            if (speedChart) speedChart.destroy();
+
+            speedChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => new Date(d.created_at)),
+                    datasets: [
+                        {
+                            label: isMobile ? 'Down' : 'Download',
+                            data: data.map(d => Number(d.download_mbps)),
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: isMobile ? 1 : 2,
+                            pointHoverRadius: isMobile ? 4 : 5,
+                            borderWidth: 2,
+                        },
+                        {
+                            label: isMobile ? 'Up' : 'Upload',
+                            data: data.map(d => Number(d.upload_mbps)),
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: isMobile ? 1 : 2,
+                            pointHoverRadius: isMobile ? 4 : 5,
+                            borderWidth: 2,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index', axis: 'x' },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                displayFormats: {
+                                    hour: isMobile ? 'HH:mm' : 'dd/MM HH:mm',
+                                    day: 'dd/MM'
+                                }
+                            },
+                            grid: { display: false },
+                            ticks: {
+                                maxRotation: 0,
+                                maxTicksLimit: isMobile ? 4 : 8,
+                                font: { size: 11 }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#334155' },
+                            ticks: {
+                                font: { size: 11 },
+                                callback: v => v + ' Mbps'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 12,
+                                font: { size: 11 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                            titleFont: { size: 12 },
+                            bodyFont: { size: 11 },
+                            padding: 10,
+                            callbacks: {
+                                label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} Mbps`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPingChart(data) {
+            const ctx = document.getElementById('pingChart').getContext('2d');
+
+            if (pingChart) pingChart.destroy();
+
+            pingChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => new Date(d.created_at)),
+                    datasets: [{
+                        label: 'Latencia',
+                        data: data.map(d => Number(d.ping_ms)),
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: isMobile ? 1 : 2,
+                        pointHoverRadius: isMobile ? 4 : 5,
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index', axis: 'x' },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                displayFormats: {
+                                    hour: isMobile ? 'HH:mm' : 'dd/MM HH:mm',
+                                    day: 'dd/MM'
+                                }
+                            },
+                            grid: { display: false },
+                            ticks: {
+                                maxRotation: 0,
+                                maxTicksLimit: isMobile ? 4 : 8,
+                                font: { size: 11 }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#334155' },
+                            ticks: {
+                                font: { size: 11 },
+                                callback: v => v + ' ms'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 12,
+                                font: { size: 11 }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(30, 41, 59, 0.95)',
+                            titleFont: { size: 12 },
+                            bodyFont: { size: 11 },
+                            padding: 10,
+                            callbacks: {
+                                label: ctx => `Latencia: ${ctx.parsed.y.toFixed(1)} ms`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        async function refresh() {
+            showLoading();
+            try {
+                const data = await fetchData(currentHours);
+
+                updateMetricCards(data);
+                createSpeedChart(data);
+                createPingChart(data);
+
+                document.getElementById('last-updated').textContent = new Date().toLocaleString('es-AR');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Time filter buttons
+        document.querySelectorAll('.time-filter .btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.time-filter .btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentHours = parseInt(btn.dataset.hours);
+                refresh();
+            });
+        });
+
+        // Refresh button
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', refresh);
+        }
+
+        // Initial load
+        refresh();
+
+        // Auto-refresh every 5 minutes
+        setInterval(refresh, 5 * 60 * 1000);
+    </script>
+</body>
+</html>

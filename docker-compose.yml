@@ -1,12 +1,16 @@
 version: '3.8'
+
 services:
-  mi-speedtest:
+  speedtest:
     build: .
-    image: mi-speedtest
+    container_name: speedtest
+    restart: unless-stopped
     environment:
-      - TINYBIRD_TOKEN=${TINYBIRD_TOKEN}
-      - TINYBIRD_BASE_URL=${TINYBIRD_BASE_URL:-https://api.us-east.aws.tinybird.co}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
       - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
-      - ERROR_REPORTING=${ERROR_REPORTING:-FALSE}
-    restart: unless-stopped
+      - ERROR_REPORTING=${ERROR_REPORTING:-TRUE}
+      - SPEED_THRESHOLD_MBPS=${SPEED_THRESHOLD_MBPS:-50}
+    volumes:
+      - ./logs:/var/log

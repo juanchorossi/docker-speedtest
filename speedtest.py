@@ -4,22 +4,20 @@
 import subprocess
 import json
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 import pytz
 import os
-
-# Load environment variables for Tinybird and Telegram
-tinybird_token = os.getenv('TINYBIRD_TOKEN')
-tinybird_base_url = os.getenv('TINYBIRD_BASE_URL', 'https://api.us-east.aws.tinybird.co')
-telegram_token = os.getenv('TELEGRAM_TOKEN')
-telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
-error_reporting = os.getenv('ERROR_REPORTING', 'FALSE').lower() == 'true'
-
-tinybird_endpoint = "/v0/events?name=speedtest"
-tinybird_url = f"{tinybird_base_url}{tinybird_endpoint}"
+from supabase import create_client, Client
 
 def send_telegram_message(message):
     """Send provided message to the Telegram chat specified by chat_id."""
+    telegram_token = os.getenv('TELEGRAM_TOKEN')
+    telegram_chat_id = os.getenv('TELEGRAM_CHAT_ID')
+
+    if not telegram_token or not telegram_chat_id:
+        print("Telegram credentials not configured, skipping notification.")
+        return
+
     telegram_api_url = f"https://api.telegram.org/bot{telegram_token}/sendMessage"
     payload = {
         'chat_id': telegram_chat_id,
@@ -35,59 +33,97 @@ def send_telegram_message(message):
 def report_error(error_message):
     """Report an error message if error reporting is enabled."""
     print(error_message)
+    error_reporting = os.getenv('ERROR_REPORTING', 'FALSE').lower() == 'true'
     if error_reporting:
         send_telegram_message(error_message)
 
-try:
-    if not tinybird_token:
-        raise ValueError("Tinybird credentials are not configured properly.")
+def check_speed_threshold(download_mbps, threshold_mbps):
+    """Check if download speed is below threshold and send alert."""
+    if threshold_mbps and download_mbps < threshold_mbps:
+        alert_message = (
+            f"*Speed Alert*\n\n"
+            f"Download speed is below threshold!\n"
+            f"Current: *{download_mbps:.2f} Mbps*\n"
+            f"Threshold: *{threshold_mbps:.2f} Mbps*"
+        )
+        send_telegram_message(alert_message)
+        return True
+    return False
 
-    print("Running speedtest-cli...")
-    with requests.Session() as session:
-        session.headers.update({"Authorization": f"Bearer {tinybird_token}"})
-        
-        # Execute speedtest-cli
-        result = subprocess.check_output(["speedtest-cli", "--json"], timeout=120).decode('utf-8')
-        print("Result from speedtest-cli:")
+def get_supabase_client() -> Client:
+    """Create and return a Supabase client."""
+    supabase_url = os.getenv('SUPABASE_URL')
+    supabase_key = os.getenv('SUPABASE_ANON_KEY')
+
+    if not supabase_url or not supabase_key:
+        raise ValueError("Supabase credentials are not configured properly.")
+
+    return create_client(supabase_url, supabase_key)
+
+# Main script execution
+if __name__ == "__main__":
+    try:
+        # Get speed threshold (optional)
+        threshold_str = os.getenv('SPEED_THRESHOLD_MBPS')
+        speed_threshold = float(threshold_str) if threshold_str else None
+
+        # Initialize Supabase client
+        supabase = get_supabase_client()
+
+        print("Running speedtest...")
+
+        # Execute speedtest CLI
+        result = subprocess.check_output(["/usr/bin/speedtest", "--format=json"], timeout=120).decode('utf-8')
+        print("Result from speedtest:")
         print(result)
 
         if result.strip() == "":
-            raise ValueError("No output received from speedtest-cli.")
+            raise ValueError("No output received from speedtest.")
 
         data = json.loads(result)
-        
-        print("Extracted data from JSON:")
-        print(data)
 
-        # Date and time processing
-        dt_object = datetime.strptime(data['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        dt_utc = dt_object.replace(tzinfo=pytz.utc)
-        local_dt = dt_utc.astimezone(pytz.timezone('America/Argentina/Buenos_Aires'))
-        dt_serializable = local_dt.isoformat()
+        # Extract and convert data
+        download_mbps = data['download']['bandwidth'] / 125000  # Convert bytes/s to Mbps
+        upload_mbps = data['upload']['bandwidth'] / 125000      # Convert bytes/s to Mbps
+        ping_ms = data['ping']['latency']
+        isp = data['isp']
+        ip = data['interface']['externalIp']
 
-        # Prepare the payload
+        print(f"Download: {download_mbps:.2f} Mbps")
+        print(f"Upload: {upload_mbps:.2f} Mbps")
+        print(f"Ping: {ping_ms:.2f} ms")
+        print(f"ISP: {isp}")
+        print(f"IP: {ip}")
+
+        # Prepare the payload for Supabase
         payload = {
-            "time": dt_serializable,
-            "download": data['download'] / 1000000,  # Convert to Mbps
-            "upload": data['upload'] / 1000000,      # Convert to Mbps
-            "ping": data['ping'],
-            "isp": data['client']['isp'],
-            "ip": data['client']['ip'],
+            "download_mbps": round(download_mbps, 2),
+            "upload_mbps": round(upload_mbps, 2),
+            "ping_ms": round(ping_ms, 2),
+            "isp": isp,
+            "ip": ip,
         }
-        print(payload)
 
-        # Send data to Tinybird
-        response = session.post(tinybird_url, json=payload)
-        if response.status_code == 202:
-            print("Data successfully sent to Tinybird.")
+        # Insert data into Supabase
+        response = supabase.table('speedtest_results').insert(payload).execute()
+
+        if response.data:
+            print("Data successfully sent to Supabase.")
         else:
-            raise ValueError(f"Error sending data to Tinybird. Status code: {response.status_code}")
+            raise ValueError(f"Error sending data to Supabase: {response}")
 
-except subprocess.CalledProcessError as e:
-    report_error(f"Error executing speedtest-cli: {e}")
-except subprocess.TimeoutExpired:
-    report_error("Timeout expired when executing speedtest-cli.")
-except KeyboardInterrupt:
-    report_error("Script manually interrupted.")
-except Exception as e:  # Catch other exceptions such as failing to read the TOKEN or other runtime exceptions
-    report_error(f"An error occurred: {e}")
+        # Check speed threshold and send alert if needed
+        if speed_threshold:
+            check_speed_threshold(download_mbps, speed_threshold)
+
+    except subprocess.CalledProcessError as e:
+        error_message = f"Error executing speedtest: Command returned non-zero exit status {e.returncode}."
+        if e.output:
+            error_message += f" Output: {e.output.decode().strip()}"
+        report_error(error_message)
+    except subprocess.TimeoutExpired:
+        report_error("Timeout expired when executing speedtest.")
+    except KeyboardInterrupt:
+        report_error("Script manually interrupted.")
+    except Exception as e:
+        report_error(f"An error occurred: {e}")

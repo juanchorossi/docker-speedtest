@@ -1,66 +1,108 @@
-# Dockerized Speedtest with Tinybird Integration
+# Speedtest Monitor con Supabase
 
-This project contains a Docker setup for running a speed test using `speedtest-cli` and then sending the test results to Tinybird.
+Monitor de velocidad de internet que ejecuta tests automáticos cada 30 minutos, guarda los resultados en Supabase y los muestra en un dashboard web.
 
-## Prerequisites
+## Arquitectura
 
-Before you can run this project, you need the following:
-- Docker installed on your system
-- A Tinybird API token and the base URL for Tinybird API
+- **speedtest.py**: Script que ejecuta el test y guarda en Supabase (corre en Docker con cron)
+- **dashboard.html**: Dashboard estático para visualizar los datos (deploy en Cloudflare Worker u otro)
+- **Supabase**: Base de datos PostgreSQL para almacenar los resultados
+
+## Requisitos
+
+- Docker y Docker Compose
+- Cuenta en [Supabase](https://supabase.com) (gratis)
+- (Opcional) Bot de Telegram para alertas
 
 ## Setup
 
-1. Clone the repository to your local machine.
-2. Navigate to the cloned directory.
-3. Make sure you have `speedtest.py` and `Dockerfile` along with a `docker-compose.yml` file within your directory.
+### 1. Configurar Supabase
 
-Your directory should look like this:
+1. Crear un proyecto en Supabase
+2. Ir a SQL Editor y ejecutar el contenido de `supabase/schema.sql`
+3. Copiar las credenciales desde Settings > API:
+   - `Project URL` → SUPABASE_URL
+   - `anon public` key → SUPABASE_ANON_KEY
 
-/speedtest-docker
-|-- Dockerfile 
-|-- speedtest.py 
-|-- docker-compose.yml 
-|-- README.md
+### 2. Configurar variables de entorno
 
-
-## Configuration
-
-### Environment Variables
-
-The application requires two environment variables:
-- `TINYBIRD_TOKEN`: Your API token for the Tinybird service.
-- `TINYBIRD_BASE_URL`: The base URL to which the speedtest data will be posted.
-
-You need to create an `.env` file in the root directory and define these variables.
-
-Example `.env` file:
-
-TINYBIRD_TOKEN=your_tinybird_api_token_here TINYBIRD_BASE_URL=https://api.us-east.aws.tinybird.co
-
-
-Make sure to replace `your_tinybird_api_token_here` with your actual Tinybird API token and use the appropriate base URL.
-
-## Running the Application
-
-With Docker Compose, running the application is straightforward.
-
-1. Build the Docker image with Docker Compose:
-
-
-Make sure to replace `your_tinybird_api_token_here` with your actual Tinybird API token and use the appropriate base URL.
-
-## Running the Application
-
-With Docker Compose, running the application is straightforward.
-
-1. Build the Docker image with Docker Compose:
-
-```
-docker build -t speedtest-docker .
+```bash
+cp .env.example .env
 ```
 
-2. Start the application in detached mode:
-docker-compose up -d
+Editar `.env` con tus credenciales:
 
-Once started, the `speedtest.py` script will execute every minute and send the results to the specified Tinybird endpoint.
+```env
+SUPABASE_URL=https://tu-proyecto.supabase.co
+SUPABASE_ANON_KEY=eyJ...
 
+# Opcional - Alertas por Telegram
+TELEGRAM_TOKEN=tu-bot-token
+TELEGRAM_CHAT_ID=tu-chat-id
+ERROR_REPORTING=TRUE
+SPEED_THRESHOLD_MBPS=50
+```
+
+### 3. Ejecutar con Docker
+
+```bash
+docker-compose up -d --build
+```
+
+El script se ejecutará cada 30 minutos (en el minuto 0 y 30 de cada hora).
+
+### 4. Configurar Dashboard
+
+Editar `dashboard.html` y reemplazar las credenciales:
+
+```javascript
+const SUPABASE_URL = 'https://tu-proyecto.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJ...';
+const SPEED_THRESHOLD_MBPS = 50;
+```
+
+Luego subir el archivo a tu Cloudflare Worker o hosting estático.
+
+## Comandos útiles
+
+```bash
+# Ver logs del cron
+docker-compose logs -f
+
+# Ejecutar test manualmente
+docker-compose exec speedtest python /app/speedtest.py
+
+# Ver logs del speedtest
+docker-compose exec speedtest cat /var/log/cron.log
+
+# Reiniciar
+docker-compose restart
+
+# Detener
+docker-compose down
+```
+
+## Alertas
+
+Si configuras `SPEED_THRESHOLD_MBPS`, recibirás una alerta por Telegram cuando la velocidad de descarga sea menor al umbral configurado.
+
+## Estructura de archivos
+
+```
+speedtest/
+├── speedtest.py          # Script principal
+├── Dockerfile
+├── docker-compose.yml
+├── .env                  # Variables de entorno (no commitear)
+├── .env.example          # Ejemplo de configuración
+├── dashboard.html        # Dashboard para Cloudflare Worker
+├── supabase/
+│   └── schema.sql        # Schema de la base de datos
+└── README.md
+```
+
+## Seguridad
+
+- `SUPABASE_ANON_KEY` es una clave pública por diseño, segura para exponer en el cliente
+- La seguridad está en las políticas RLS (Row Level Security) de Supabase
+- Nunca expongas la `service_role` key
