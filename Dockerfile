@@ -17,7 +17,7 @@ RUN curl -Lo speedtest.tgz https://install.speedtest.net/app/cli/ookla-speedtest
 
 RUN /usr/bin/speedtest --accept-license --accept-gdpr > /dev/null
 
-RUN pip install --no-cache-dir requests pytz supabase
+RUN pip install --no-cache-dir requests pytz supabase dnspython
 
 RUN test -e /usr/bin/python || ln -s /usr/bin/python3 /usr/bin/python
 RUN mkdir -p /var/log
@@ -29,6 +29,6 @@ COPY entrypoint.sh .
 RUN chmod +x /app/speedtest.py /app/entrypoint.sh
 
 # Cron cada 30 minutos
-RUN echo "0,30 * * * * . /app/.env.sh && python /app/speedtest.py >> /var/log/cron.log 2>&1" > /etc/crontabs/root
+RUN echo "0,30 * * * * . /app/.env.sh && /usr/local/bin/python /app/speedtest.py >> /var/log/cron.log 2>&1" > /etc/crontabs/root
 
 CMD ["/app/entrypoint.sh"]

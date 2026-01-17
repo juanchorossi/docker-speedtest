@@ -7,6 +7,8 @@ import requests
 from datetime import datetime, timezone
 import pytz
 import os
+import time
+import dns.resolver
 from supabase import create_client, Client
 
 def send_telegram_message(message):
@@ -60,6 +62,19 @@ def get_supabase_client() -> Client:
 
     return create_client(supabase_url, supabase_key)
 
+def measure_dns(domain="google.com", server="1.1.1.1"):
+    """Measure DNS resolution time for a specific server."""
+    resolver = dns.resolver.Resolver()
+    resolver.nameservers = [server]
+    resolver.timeout = 5
+    resolver.lifetime = 5
+    start = time.time()
+    try:
+        resolver.resolve(domain, 'A')
+        return round((time.time() - start) * 1000, 2)
+    except Exception:
+        return None
+
 # Main script execution
 if __name__ == "__main__":
     try:
@@ -86,12 +101,21 @@ if __name__ == "__main__":
         download_mbps = data['download']['bandwidth'] / 125000  # Convert bytes/s to Mbps
         upload_mbps = data['upload']['bandwidth'] / 125000      # Convert bytes/s to Mbps
         ping_ms = data['ping']['latency']
+        ping_jitter = data['ping']['jitter']
+        ping_low = data['ping']['low']
+        ping_high = data['ping']['high']
         isp = data['isp']
         ip = data['interface']['externalIp']
 
+        # Measure DNS resolution times
+        dns_cloudflare_ms = measure_dns(server="1.1.1.1")
+        dns_isp_ms = measure_dns(server="190.13.208.2")
+
         print(f"Download: {download_mbps:.2f} Mbps")
         print(f"Upload: {upload_mbps:.2f} Mbps")
-        print(f"Ping: {ping_ms:.2f} ms")
+        print(f"Ping: {ping_ms:.2f} ms (jitter: {ping_jitter:.2f}, low: {ping_low:.2f}, high: {ping_high:.2f})")
+        print(f"DNS Cloudflare: {dns_cloudflare_ms} ms")
+        print(f"DNS ISP (KMM): {dns_isp_ms} ms")
         print(f"ISP: {isp}")
         print(f"IP: {ip}")
 
@@ -100,6 +124,11 @@ if __name__ == "__main__":
             "download_mbps": round(download_mbps, 2),
             "upload_mbps": round(upload_mbps, 2),
             "ping_ms": round(ping_ms, 2),
+            "ping_jitter": round(ping_jitter, 2),
+            "ping_low": round(ping_low, 2),
+            "ping_high": round(ping_high, 2),
+            "dns_cloudflare_ms": dns_cloudflare_ms,
+            "dns_isp_ms": dns_isp_ms,
             "isp": isp,
             "ip": ip,
         }
