@@ -109,15 +109,15 @@ if __name__ == "__main__":
 
         # Measure DNS resolution times
         dns_cloudflare_ms = measure_dns(server="1.1.1.1")
+        dns_google_ms = measure_dns(server="8.8.8.8")
         dns_isp_ms = measure_dns(server="190.13.208.2")
 
         print(f"Download: {download_mbps:.2f} Mbps")
         print(f"Upload: {upload_mbps:.2f} Mbps")
         print(f"Ping: {ping_ms:.2f} ms (jitter: {ping_jitter:.2f}, low: {ping_low:.2f}, high: {ping_high:.2f})")
         print(f"DNS Cloudflare: {dns_cloudflare_ms} ms")
-        print(f"DNS ISP (KMM): {dns_isp_ms} ms")
-        print(f"ISP: {isp}")
-        print(f"IP: {ip}")
+        print(f"DNS Google: {dns_google_ms} ms")
+        print(f"DNS ISP: {dns_isp_ms} ms")
 
         # Prepare the payload for Supabase
         payload = {
@@ -128,6 +128,7 @@ if __name__ == "__main__":
             "ping_low": round(ping_low, 2),
             "ping_high": round(ping_high, 2),
             "dns_cloudflare_ms": dns_cloudflare_ms,
+            "dns_google_ms": dns_google_ms,
             "dns_isp_ms": dns_isp_ms,
             "isp": isp,
             "ip": ip,

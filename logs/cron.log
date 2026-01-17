@@ -88,3 +88,221 @@ Ping: 3.50 ms
 ISP: Skycorp S.A.
 IP: 181.174.201.154
 Data successfully sent to Supabase.
+Traceback (most recent call last):
+  File "/app/speedtest.py", line 6, in <module>
+    import requests
+ModuleNotFoundError: No module named 'requests'
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T17:55:35Z","ping":{"jitter":0.142,"latency":3.357,"low":3.170,"high":3.465},"download":{"bandwidth":36707344,"bytes":414630763,"elapsed":11101,"latency":{"iqm":4.246,"low":2.723,"high":210.441,"jitter":7.258}},"upload":{"bandwidth":1840917,"bytes":25433768,"elapsed":12412,"latency":{"iqm":20.514,"low":2.431,"high":415.177,"jitter":38.187}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"a3db4d70-260b-444e-90c9-af0e5b584570","url":"https://www.speedtest.net/result/c/a3db4d70-260b-444e-90c9-af0e5b584570","persisted":true}}
+
+Download: 293.66 Mbps
+Upload: 14.73 Mbps
+Ping: 3.36 ms
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T18:00:35Z","ping":{"jitter":0.208,"latency":3.591,"low":3.388,"high":3.785},"download":{"bandwidth":36468094,"bytes":397816744,"elapsed":10600,"latency":{"iqm":4.610,"low":2.831,"high":211.879,"jitter":7.206}},"upload":{"bandwidth":896446,"bytes":13022800,"elapsed":15004,"latency":{"iqm":126.505,"low":2.574,"high":1834.014,"jitter":64.189}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13442,"host":"st-banorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"San Isidro","country":"Argentina","ip":"181.12.140.20"},"result":{"id":"327bfb7d-b6f1-436a-a395-2bff4582d6c6","url":"https://www.speedtest.net/result/c/327bfb7d-b6f1-436a-a395-2bff4582d6c6","persisted":true}}
+
+Download: 291.74 Mbps
+Upload: 7.17 Mbps
+Ping: 3.59 ms
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T18:21:29Z","ping":{"jitter":0.103,"latency":3.465,"low":3.263,"high":3.636},"download":{"bandwidth":36754008,"bytes":405893960,"elapsed":10811,"latency":{"iqm":3.747,"low":2.840,"high":209.628,"jitter":4.987}},"upload":{"bandwidth":1724135,"bytes":25651008,"elapsed":15009,"latency":{"iqm":35.684,"low":2.525,"high":429.384,"jitter":43.200}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"10ba00b9-29d9-44ca-a595-5a2281be59f1","url":"https://www.speedtest.net/result/c/10ba00b9-29d9-44ca-a595-5a2281be59f1","persisted":true}}
+
+Download: 294.03 Mbps
+Upload: 13.79 Mbps
+Ping: 3.46 ms (jitter: 0.10, low: 3.26, high: 3.64)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T18:30:33Z","ping":{"jitter":0.125,"latency":3.959,"low":3.769,"high":4.139},"download":{"bandwidth":36689411,"bytes":372910288,"elapsed":9808,"latency":{"iqm":4.083,"low":3.055,"high":209.371,"jitter":5.397}},"upload":{"bandwidth":1892038,"bytes":26650360,"elapsed":12613,"latency":{"iqm":49.428,"low":2.507,"high":424.087,"jitter":47.694}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13442,"host":"st-banorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"San Isidro","country":"Argentina","ip":"181.12.140.20"},"result":{"id":"ff03f3c1-ea0a-4eda-9d54-657bf3241b4b","url":"https://www.speedtest.net/result/c/ff03f3c1-ea0a-4eda-9d54-657bf3241b4b","persisted":true}}
+
+Download: 293.52 Mbps
+Upload: 15.14 Mbps
+Ping: 3.96 ms (jitter: 0.12, low: 3.77, high: 4.14)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T19:00:30Z","ping":{"jitter":0.065,"latency":3.376,"low":3.258,"high":3.476},"download":{"bandwidth":36393661,"bytes":385426139,"elapsed":10302,"latency":{"iqm":3.548,"low":2.643,"high":215.790,"jitter":8.689}},"upload":{"bandwidth":1914869,"bytes":26963216,"elapsed":12607,"latency":{"iqm":38.715,"low":2.446,"high":421.242,"jitter":44.613}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"73864039-cdcc-419f-be6e-e26ed14b042e","url":"https://www.speedtest.net/result/c/73864039-cdcc-419f-be6e-e26ed14b042e","persisted":true}}
+
+Download: 291.15 Mbps
+Upload: 15.32 Mbps
+Ping: 3.38 ms (jitter: 0.07, low: 3.26, high: 3.48)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T19:30:29Z","ping":{"jitter":0.074,"latency":3.497,"low":3.463,"high":3.651},"download":{"bandwidth":36821608,"bytes":361493003,"elapsed":9504,"latency":{"iqm":3.618,"low":2.702,"high":211.814,"jitter":5.198}},"upload":{"bandwidth":1917485,"bytes":26945800,"elapsed":12600,"latency":{"iqm":33.982,"low":2.527,"high":421.627,"jitter":41.567}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"6b92e1d3-ff0f-4e52-ac2e-212b38a5621a","url":"https://www.speedtest.net/result/c/6b92e1d3-ff0f-4e52-ac2e-212b38a5621a","persisted":true}}
+
+Download: 294.57 Mbps
+Upload: 15.34 Mbps
+Ping: 3.50 ms (jitter: 0.07, low: 3.46, high: 3.65)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T20:00:34Z","ping":{"jitter":0.062,"latency":3.554,"low":3.458,"high":3.593},"download":{"bandwidth":36558065,"bytes":425154511,"elapsed":11306,"latency":{"iqm":3.473,"low":2.581,"high":214.382,"jitter":13.107}},"upload":{"bandwidth":1926711,"bytes":27139616,"elapsed":12623,"latency":{"iqm":51.643,"low":2.398,"high":1673.524,"jitter":48.062}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"15fe135e-135e-4685-834d-43e229571403","url":"https://www.speedtest.net/result/c/15fe135e-135e-4685-834d-43e229571403","persisted":true}}
+
+Download: 292.46 Mbps
+Upload: 15.41 Mbps
+Ping: 3.55 ms (jitter: 0.06, low: 3.46, high: 3.59)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T20:30:30Z","ping":{"jitter":0.199,"latency":3.655,"low":3.371,"high":3.938},"download":{"bandwidth":36290834,"bytes":392264686,"elapsed":10411,"latency":{"iqm":3.530,"low":2.611,"high":212.730,"jitter":5.276}},"upload":{"bandwidth":1924943,"bytes":27146440,"elapsed":12626,"latency":{"iqm":36.788,"low":2.533,"high":419.616,"jitter":44.075}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"d9cf8070-8b82-403f-98a5-dc245de42299","url":"https://www.speedtest.net/result/c/d9cf8070-8b82-403f-98a5-dc245de42299","persisted":true}}
+
+Download: 290.33 Mbps
+Upload: 15.40 Mbps
+Ping: 3.65 ms (jitter: 0.20, low: 3.37, high: 3.94)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T21:00:26Z","ping":{"jitter":0.336,"latency":3.499,"low":3.394,"high":4.079},"download":{"bandwidth":36181342,"bytes":381919035,"elapsed":10213,"latency":{"iqm":3.778,"low":2.858,"high":216.727,"jitter":5.471}},"upload":{"bandwidth":1925580,"bytes":27309800,"elapsed":12703,"latency":{"iqm":61.727,"low":2.505,"high":837.587,"jitter":51.408}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"f938938e-7ec2-49d4-b216-69ee0ea11a69","url":"https://www.speedtest.net/result/c/f938938e-7ec2-49d4-b216-69ee0ea11a69","persisted":true}}
+
+Download: 289.45 Mbps
+Upload: 15.40 Mbps
+Ping: 3.50 ms (jitter: 0.34, low: 3.39, high: 4.08)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T21:30:28Z","ping":{"jitter":0.286,"latency":3.470,"low":3.323,"high":3.938},"download":{"bandwidth":36604416,"bytes":429373602,"elapsed":11413,"latency":{"iqm":4.008,"low":2.681,"high":207.247,"jitter":3.597}},"upload":{"bandwidth":1927056,"bytes":27308400,"elapsed":12709,"latency":{"iqm":28.698,"low":2.413,"high":419.228,"jitter":41.188}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"c6475ecf-384e-491a-8068-32b7ce625053","url":"https://www.speedtest.net/result/c/c6475ecf-384e-491a-8068-32b7ce625053","persisted":true}}
+
+Download: 292.84 Mbps
+Upload: 15.42 Mbps
+Ping: 3.47 ms (jitter: 0.29, low: 3.32, high: 3.94)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T22:00:35Z","ping":{"jitter":1.918,"latency":5.789,"low":3.526,"high":11.181},"download":{"bandwidth":36240960,"bytes":385496461,"elapsed":10301,"latency":{"iqm":3.617,"low":2.774,"high":12.354,"jitter":0.733}},"upload":{"bandwidth":1925588,"bytes":27528816,"elapsed":12814,"latency":{"iqm":10.899,"low":2.330,"high":417.943,"jitter":31.413}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"507e756e-4aea-4b40-91a1-3fca82ce428b","url":"https://www.speedtest.net/result/c/507e756e-4aea-4b40-91a1-3fca82ce428b","persisted":true}}
+
+Download: 289.93 Mbps
+Upload: 15.40 Mbps
+Ping: 5.79 ms (jitter: 1.92, low: 3.53, high: 11.18)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T22:30:28Z","ping":{"jitter":0.098,"latency":3.531,"low":3.458,"high":3.658},"download":{"bandwidth":36736509,"bytes":407168090,"elapsed":10805,"latency":{"iqm":3.701,"low":2.608,"high":209.593,"jitter":4.502}},"upload":{"bandwidth":1924572,"bytes":27130600,"elapsed":12623,"latency":{"iqm":56.419,"low":2.485,"high":835.072,"jitter":50.161}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13442,"host":"st-banorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"San Isidro","country":"Argentina","ip":"181.12.140.20"},"result":{"id":"af29ccb5-0781-46a7-8223-cf8abcbb1bfd","url":"https://www.speedtest.net/result/c/af29ccb5-0781-46a7-8223-cf8abcbb1bfd","persisted":true}}
+
+Download: 293.89 Mbps
+Upload: 15.40 Mbps
+Ping: 3.53 ms (jitter: 0.10, low: 3.46, high: 3.66)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T23:00:29Z","ping":{"jitter":0.159,"latency":3.701,"low":3.618,"high":3.901},"download":{"bandwidth":36481028,"bytes":376633146,"elapsed":10007,"latency":{"iqm":3.743,"low":2.798,"high":212.262,"jitter":4.699}},"upload":{"bandwidth":1920887,"bytes":27252400,"elapsed":12711,"latency":{"iqm":29.196,"low":2.532,"high":423.654,"jitter":41.610}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13442,"host":"st-banorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"San Isidro","country":"Argentina","ip":"181.12.140.20"},"result":{"id":"13300de3-fced-4801-bd7e-f315938fb8b4","url":"https://www.speedtest.net/result/c/13300de3-fced-4801-bd7e-f315938fb8b4","persisted":true}}
+
+Download: 291.85 Mbps
+Upload: 15.37 Mbps
+Ping: 3.70 ms (jitter: 0.16, low: 3.62, high: 3.90)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-16T23:30:27Z","ping":{"jitter":0.064,"latency":3.424,"low":3.338,"high":3.497},"download":{"bandwidth":36546633,"bytes":407904904,"elapsed":10907,"latency":{"iqm":3.873,"low":2.674,"high":208.166,"jitter":4.781}},"upload":{"bandwidth":1888222,"bytes":26493472,"elapsed":12613,"latency":{"iqm":48.373,"low":2.696,"high":851.826,"jitter":47.928}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13442,"host":"st-banorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"San Isidro","country":"Argentina","ip":"181.12.140.20"},"result":{"id":"2414c584-f144-43eb-819d-3579b28e7ffa","url":"https://www.speedtest.net/result/c/2414c584-f144-43eb-819d-3579b28e7ffa","persisted":true}}
+
+Download: 292.37 Mbps
+Upload: 15.11 Mbps
+Ping: 3.42 ms (jitter: 0.06, low: 3.34, high: 3.50)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-17T00:00:28Z","ping":{"jitter":0.205,"latency":3.502,"low":3.338,"high":3.959},"download":{"bandwidth":36271484,"bytes":382311313,"elapsed":10205,"latency":{"iqm":4.061,"low":2.831,"high":208.509,"jitter":4.804}},"upload":{"bandwidth":1857209,"bytes":24326400,"elapsed":11711,"latency":{"iqm":16.727,"low":2.640,"high":422.704,"jitter":34.450}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13442,"host":"st-banorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"San Isidro","country":"Argentina","ip":"181.12.140.20"},"result":{"id":"f23e6a2b-6a4b-4d65-83e8-6bd4b765a80a","url":"https://www.speedtest.net/result/c/f23e6a2b-6a4b-4d65-83e8-6bd4b765a80a","persisted":true}}
+
+Download: 290.17 Mbps
+Upload: 14.86 Mbps
+Ping: 3.50 ms (jitter: 0.20, low: 3.34, high: 3.96)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-17T00:30:28Z","ping":{"jitter":0.108,"latency":3.531,"low":3.381,"high":3.633},"download":{"bandwidth":36256714,"bytes":382089916,"elapsed":10114,"latency":{"iqm":3.593,"low":2.835,"high":215.560,"jitter":2.989}},"upload":{"bandwidth":1926973,"bytes":27301400,"elapsed":12711,"latency":{"iqm":62.683,"low":2.601,"high":855.781,"jitter":52.439}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"ac3771ae-ba9e-495d-bf72-3c60c3f0565f","url":"https://www.speedtest.net/result/c/ac3771ae-ba9e-495d-bf72-3c60c3f0565f","persisted":true}}
+
+Download: 290.05 Mbps
+Upload: 15.42 Mbps
+Ping: 3.53 ms (jitter: 0.11, low: 3.38, high: 3.63)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-17T01:00:29Z","ping":{"jitter":0.203,"latency":3.733,"low":3.593,"high":3.872},"download":{"bandwidth":36573491,"bytes":411762294,"elapsed":10900,"latency":{"iqm":4.015,"low":3.043,"high":210.278,"jitter":12.138}},"upload":{"bandwidth":1927924,"bytes":27300000,"elapsed":12701,"latency":{"iqm":59.220,"low":2.568,"high":856.903,"jitter":51.597}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13442,"host":"st-banorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"San Isidro","country":"Argentina","ip":"181.12.140.20"},"result":{"id":"a6d66bbd-457e-4f09-9701-f262cdb1a2ec","url":"https://www.speedtest.net/result/c/a6d66bbd-457e-4f09-9701-f262cdb1a2ec","persisted":true}}
+
+Download: 292.59 Mbps
+Upload: 15.42 Mbps
+Ping: 3.73 ms (jitter: 0.20, low: 3.59, high: 3.87)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-17T01:30:28Z","ping":{"jitter":0.106,"latency":3.404,"low":3.197,"high":3.446},"download":{"bandwidth":36495099,"bytes":400653316,"elapsed":10604,"latency":{"iqm":3.757,"low":2.814,"high":207.648,"jitter":3.019}},"upload":{"bandwidth":1911443,"bytes":27587000,"elapsed":13031,"latency":{"iqm":52.097,"low":2.415,"high":836.132,"jitter":48.965}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"636e558f-9747-4bb6-933a-2edf50a201af","url":"https://www.speedtest.net/result/c/636e558f-9747-4bb6-933a-2edf50a201af","persisted":true}}
+
+Download: 291.96 Mbps
+Upload: 15.29 Mbps
+Ping: 3.40 ms (jitter: 0.11, low: 3.20, high: 3.45)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-17T02:00:28Z","ping":{"jitter":0.385,"latency":3.365,"low":3.198,"high":3.723},"download":{"bandwidth":36684651,"bytes":375215853,"elapsed":10015,"latency":{"iqm":3.703,"low":2.479,"high":213.694,"jitter":5.493}},"upload":{"bandwidth":1719356,"bytes":24967456,"elapsed":13112,"latency":{"iqm":24.486,"low":2.514,"high":849.539,"jitter":38.501}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.20.0.2","name":"eth0","macAddr":"02:42:AC:14:00:02","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"43458075-fc5c-4173-b823-9cc94481fb5c","url":"https://www.speedtest.net/result/c/43458075-fc5c-4173-b823-9cc94481fb5c","persisted":true}}
+
+Download: 293.48 Mbps
+Upload: 13.75 Mbps
+Ping: 3.37 ms (jitter: 0.39, low: 3.20, high: 3.72)
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-17T02:09:10Z","ping":{"jitter":0.161,"latency":3.293,"low":2.832,"high":3.457},"download":{"bandwidth":36850632,"bytes":409286406,"elapsed":10901,"latency":{"iqm":4.210,"low":2.711,"high":208.970,"jitter":4.003}},"upload":{"bandwidth":1917405,"bytes":27129200,"elapsed":12711,"latency":{"iqm":65.609,"low":2.453,"high":827.804,"jitter":52.213}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.17.0.3","name":"eth0","macAddr":"02:42:AC:11:00:03","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"6dc94949-bb5a-49d5-b0d1-4297ae65782f","url":"https://www.speedtest.net/result/c/6dc94949-bb5a-49d5-b0d1-4297ae65782f","persisted":true}}
+
+Download: 294.81 Mbps
+Upload: 15.34 Mbps
+Ping: 3.29 ms (jitter: 0.16, low: 2.83, high: 3.46)
+DNS Cloudflare: 10.1 ms
+DNS ISP (KMM): 2.29 ms
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
+Running speedtest...
+Result from speedtest:
+{"type":"result","timestamp":"2026-01-17T02:30:29Z","ping":{"jitter":0.152,"latency":3.443,"low":3.391,"high":3.618},"download":{"bandwidth":36811040,"bytes":436656918,"elapsed":11613,"latency":{"iqm":4.321,"low":2.869,"high":210.259,"jitter":6.841}},"upload":{"bandwidth":1916140,"bytes":26445216,"elapsed":12601,"latency":{"iqm":17.924,"low":2.420,"high":834.278,"jitter":35.351}},"isp":"Skycorp S.A.","interface":{"internalIp":"172.17.0.3","name":"eth0","macAddr":"02:42:AC:11:00:03","isVpn":false,"externalIp":"181.174.201.154"},"server":{"id":13477,"host":"st-cabanorte-slo1.cablevisionfibertel.com.ar","port":8080,"name":"Telecom Personal","location":"Jose Leon Suarez","country":"Argentina","ip":"181.12.140.34"},"result":{"id":"38d94359-4148-4ec5-a9c3-e73b7ae44fc8","url":"https://www.speedtest.net/result/c/38d94359-4148-4ec5-a9c3-e73b7ae44fc8","persisted":true}}
+
+Download: 294.49 Mbps
+Upload: 15.33 Mbps
+Ping: 3.44 ms (jitter: 0.15, low: 3.39, high: 3.62)
+DNS Cloudflare: 26.26 ms
+DNS ISP (KMM): 9.36 ms
+ISP: Skycorp S.A.
+IP: 181.174.201.154
+Data successfully sent to Supabase.
